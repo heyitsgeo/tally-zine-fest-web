@@ -1,0 +1,17 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/**
+ * Label Component
+ *
+ * @description Form field label
+ */
+
+type Props = {} & HTMLAttributes<'label'>;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<label class:list={['font-monotalic text-accent-800 text-[0.65rem] tracking-[0.2em] uppercase', className]} {...rest}>
+	<slot />
+</label>

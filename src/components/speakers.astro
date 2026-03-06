@@ -1,0 +1,53 @@
+---
+const speakers = [
+	{
+		name: 'Speaker TBA',
+		topic: 'Indie Publishing in the Digital Age',
+		bio: 'Speaker details coming soon. Check back for announcements.',
+		photoClass: 'bg-primary-200',
+	},
+	{
+		name: 'Speaker TBA',
+		topic: 'Building Community Through Zines',
+		bio: 'Speaker details coming soon. Check back for announcements.',
+		photoClass: 'bg-secondary-500',
+	},
+	{
+		name: 'Speaker TBA',
+		topic: 'DIY Distribution Networks',
+		bio: 'Speaker details coming soon. Check back for announcements.',
+		photoClass: 'bg-accent-400',
+	},
+];
+---
+
+<section aria-labelledby="speakers-heading">
+<div class="content-container">
+		<div class="flex flex-col gap-10">
+			<div class="flex flex-col gap-2">
+				<span class="font-monotalic text-accent-800 text-[0.65rem] tracking-[0.25em] uppercase">2026 Lineup</span>
+				<h2
+					id="speakers-heading"
+					class="font-monotalic text-secondary-500 after:bg-primary-200 relative w-fit text-3xl after:absolute after:right-0 after:bottom-0 after:left-0 after:-z-10 after:h-4"
+				>Speakers</h2>
+			</div>
+
+			<ul class="m-0 grid list-none gap-8 p-0 sm:grid-cols-2 lg:grid-cols-3">
+				{
+					speakers.map((speaker) => (
+						<li class="flex flex-col gap-4">
+							<div class:list={['aspect-[3/4] w-full', speaker.photoClass]} />
+							<div class="flex flex-col gap-1.5">
+								<p class="font-monotalic text-[0.6rem] uppercase tracking-[0.2em] text-secondary-500">
+									{speaker.topic}
+								</p>
+								<h3 class="font-monotalic text-xl text-accent-800">{speaker.name}</h3>
+								<p class="mt-1 text-sm font-normal leading-relaxed text-accent-800/50">{speaker.bio}</p>
+							</div>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>

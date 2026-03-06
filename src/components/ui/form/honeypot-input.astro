@@ -1,0 +1,19 @@
+---
+type Props = {
+	name: string;
+	label: string;
+};
+
+const { name, label } = Astro.props;
+---
+
+<div class="additional-info">
+	<label for={name}>{label}</label>
+	<input id={name} name={name} type="text" />
+</div>
+
+<style>
+	.additional-info {
+		display: none;
+	}
+</style>

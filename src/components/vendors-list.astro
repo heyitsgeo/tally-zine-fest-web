@@ -1,0 +1,25 @@
+---
+const vendors = [
+	{ name: 'Vendor TBA', category: 'Zines' },
+	{ name: 'Vendor TBA', category: 'Art Prints' },
+	{ name: 'Vendor TBA', category: 'Comics & Illustration' },
+	{ name: 'Vendor TBA', category: 'Handmade Goods' },
+	{ name: 'Vendor TBA', category: 'Photography' },
+	{ name: 'Vendor TBA', category: 'Small Press' },
+	{ name: 'Vendor TBA', category: 'Stickers & Patches' },
+	{ name: 'Vendor TBA', category: 'Music & Cassettes' },
+];
+---
+
+<div class="grid grid-cols-2 gap-px bg-accent-800/15 sm:grid-cols-3 lg:grid-cols-4">
+	{
+		vendors.map((vendor) => (
+			<div class="flex flex-col gap-1.5 bg-surface-100 p-5">
+				<span class="font-monotalic text-secondary-500 text-[0.6rem] uppercase tracking-[0.2em]">
+					{vendor.category}
+				</span>
+				<p class="font-monotalic text-accent-800 text-sm">{vendor.name}</p>
+			</div>
+		))
+	}
+</div>

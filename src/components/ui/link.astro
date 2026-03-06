@@ -1,0 +1,65 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/**
+ * Link Component
+ */
+
+type Props = {
+	asButton?: boolean;
+	isExternal?: boolean;
+	size?: 'normal' | 'small';
+} & HTMLAttributes<'a'>;
+
+const { asButton, class: className, isExternal = false, size = 'normal', rel, ...rest } = Astro.props;
+
+function parseRelTokens(value: string) {
+	return value
+		.split(/\s+/)
+		.map((token) => token.trim())
+		.filter(Boolean);
+}
+
+function ensureRel(base: string, extra: string | null | undefined) {
+	const finalTokens = new Set<string>();
+
+	parseRelTokens(base).forEach((token) => finalTokens.add(token));
+
+	if (typeof extra === 'string') {
+		parseRelTokens(extra).forEach((token) => finalTokens.add(token));
+	}
+
+	return finalTokens.size > 0 ? Array.from(finalTokens).join(' ') : undefined;
+}
+
+const externalRelDefaults = 'noopener noreferrer';
+
+const finalRel = isExternal ? ensureRel(externalRelDefaults, rel) : ensureRel('', rel);
+
+const externalAttributes = isExternal
+	? {
+			target: '_blank',
+		}
+	: {};
+---
+
+<a
+	class:list={[
+		asButton ? 'button' : 'link',
+		{ 'text-normal': size === 'normal' },
+		{ 'link-small text-[0.7rem] tracking-[0.15em]': size === 'small' },
+		className,
+	]}
+	rel={finalRel}
+	{...externalAttributes}
+	{...rest}
+>
+	<slot />
+</a>
+
+<style>
+	:where(.link-small) :global(svg) {
+		height: 1.25rem;
+		width: 1.25rem;
+	}
+</style>

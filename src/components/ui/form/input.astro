@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/**
+ * Input Component
+ *
+ * @description Text input field
+ */
+
+type Props = {
+	invalid?: boolean;
+} & HTMLAttributes<'input'>;
+
+const { class: className, invalid = false, ...rest } = Astro.props;
+---
+
+<input
+	aria-invalid={invalid}
+	class:list={[
+		{ 'border-error-500': invalid },
+		{ 'border-accent-800': !invalid },
+		'text-accent-800 placeholder:text-accent-800/30 focus:border-secondary-500 bg-transparent',
+		'font-degular placeholder:font-degular text-base font-medium outline-none placeholder:font-normal',
+		'w-full border-2 px-3 py-2',
+		className,
+	]}
+	{...rest}
+/>

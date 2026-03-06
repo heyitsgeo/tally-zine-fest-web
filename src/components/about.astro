@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import TZFRZCharacter from '@/assets/tzf_rz_character.png';
+import Heading from '@/components/ui/heading.astro';
+import Reveal from '@/components/ui/reveal.astro';
+import Chip from '@/components/ui/chip.astro';
+---
+
+<section aria-labelledby="about">
+	<div class="content-container">
+		<div class="flex flex-col gap-10">
+			<Reveal class="section-header">
+				<Heading tag="h3">What is Tally Zine Fest</Heading>
+				<Heading id="about"> About </Heading>
+			</Reveal>
+
+			<div class="grid gap-10 md:grid-cols-[auto_1fr] md:gap-16">
+				<div class="hidden flex-col gap-3 md:flex">
+					<Reveal>
+						<div class="bg-accent-800 h-px"></div>
+						<p class="font-monotalic text-primary-200 text-[7rem] leading-none select-none" aria-hidden="true">TZF</p>
+						<Image src={TZFRZCharacter} alt="Illustration of an anthropomorphic Risograph printer." class="w-52" />
+					</Reveal>
+				</div>
+
+				<div class="flex flex-col gap-8">
+					<div class="flex flex-col gap-4">
+						<Reveal>
+							<p class="text-lg leading-relaxed">
+								Tally Zine Fest is a celebration of local zine makers, self-publishing, printmaking and DIY culture.
+								This annual event is FREE and will be held at the Challenger Learning Center on March 28th from 11am-5pm
+								with an afterparty at the Bark starting at 6pm. Join us for a day of zine-related art with 40+ vendors,
+								art books, zine-making workshops, diy printmaking, and a keynote by comic artist Anya Davidson
+								(Fantographics Books, Picturebox Books).
+							</p>
+							<br />
+							<p class="text-base leading-relaxed">
+								Zines are small-run indie publications that include comics, poetry, manifestos, photography...etc. They
+								provide a tangible, off-internet way for artists, especially historically marginalized ones, to
+								distribute their work outside of the mainstream.
+							</p>
+						</Reveal>
+					</div>
+					<Reveal as="ul" class="m-0 flex list-none flex-wrap gap-3 p-0">
+						<Chip variant="filled">March 28, 2026</Chip>
+						<Chip>Challenger Learning Center</Chip>
+						<Chip>Free to Attend</Chip>
+						<Chip>40+ Artist/Vendors</Chip>
+						<Chip>Talks and Workshops</Chip>
+					</Reveal>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

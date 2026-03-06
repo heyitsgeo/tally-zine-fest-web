@@ -1,0 +1,26 @@
+---
+import TZFLettersLogo from '@/assets/tzf_letters.svg';
+import NavLink from '@/components/ui/header/nav-link.astro';
+import { ENV } from '@/lib/env';
+import { Icon } from 'astro-icon/components';
+
+const { instagramUrl, facebookUrl } = ENV;
+---
+
+<header class="bg-surface-100 flex items-center justify-between px-[4vw] py-[2vw]">
+	<TZFLettersLogo class="h-10 w-auto" />
+	<nav>
+		<ul class="flex gap-2">
+			<li>
+				<NavLink isExternal href={instagramUrl}>
+					<Icon name="instagram" />
+				</NavLink>
+			</li>
+			<li>
+				<NavLink isExternal href={facebookUrl}>
+					<Icon name="facebook" />
+				</NavLink>
+			</li>
+		</ul>
+	</nav>
+</header>

@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+@theme {
+	/* Primary Colors */
+	--color-primary-50: oklch(0.959 0.053 148.46);
+	--color-primary-100: oklch(0.907 0.135 147.96);
+	--color-primary-200: oklch(0.828 0.183 147.54); /* main */
+	--color-primary-300: oklch(0.74 0.163 147.6);
+	--color-primary-400: oklch(0.658 0.145 147.54);
+	--color-primary-500: oklch(0.564 0.124 147.62);
+	--color-primary-600: oklch(0.479 0.105 147.58);
+	--color-primary-700: oklch(0.396 0.087 147.76);
+	--color-primary-800: oklch(0.312 0.069 147.43);
+	--color-primary-900: oklch(0.218 0.047 148.23);
+	--color-primary-950: oklch(0.171 0.038 147.18);
+
+	/* Secondary Colors */
+	--color-secondary-50: oklch(0.956 0.018 272.35);
+	--color-secondary-100: oklch(0.923 0.032 270.47);
+	--color-secondary-200: oklch(0.846 0.068 270.21);
+	--color-secondary-300: oklch(0.769 0.104 267);
+	--color-secondary-400: oklch(0.684 0.147 262.5);
+	--color-secondary-500: oklch(0.61 0.179 257.94); /* main */
+	--color-secondary-600: oklch(0.512 0.151 257.99);
+	--color-secondary-700: oklch(0.424 0.125 258.1);
+	--color-secondary-800: oklch(0.33 0.097 257.99);
+	--color-secondary-900: oklch(0.235 0.07 257.76);
+	--color-secondary-950: oklch(0.177 0.054 259.15);
+
+	/* Accent Colors */
+	--color-accent-50: oklch(0.966 0.013 41.28);
+	--color-accent-100: oklch(0.925 0.032 42.29);
+	--color-accent-200: oklch(0.859 0.064 43.94);
+	--color-accent-300: oklch(0.785 0.11 50);
+	--color-accent-400: oklch(0.709 0.134 53.57);
+	--color-accent-500: oklch(0.638 0.121 53.07);
+	--color-accent-600: oklch(0.559 0.106 53.16);
+	--color-accent-700: oklch(0.482 0.092 52.86);
+	--color-accent-800: oklch(0.408 0.077 53.26); /* main */
+	--color-accent-900: oklch(0.271 0.052 53.71);
+	--color-accent-950: oklch(0.21 0.039 54.34);
+
+	/* Surface Colors */
+	--color-surface-50: oklch(0.972 0.065 100.85);
+	--color-surface-100: oklch(0.937 0.182 104); /* main */
+	--color-surface-200: oklch(0.849 0.18 104.35);
+	--color-surface-300: oklch(0.754 0.159 104.32);
+	--color-surface-400: oklch(0.668 0.141 104.41);
+	--color-surface-500: oklch(0.583 0.123 104.57);
+	--color-surface-600: oklch(0.488 0.103 103.98);
+	--color-surface-700: oklch(0.402 0.085 104.25);
+	--color-surface-800: oklch(0.316 0.067 103.53);
+	--color-surface-900: oklch(0.223 0.047 103.99);
+	--color-surface-950: oklch(0.175 0.037 104.56);
+
+	/* Error Colors */
+	--color-error-50: oklch(0.962 0.018 22.5);
+	--color-error-100: oklch(0.918 0.048 22.1);
+	--color-error-200: oklch(0.842 0.098 22.3);
+	--color-error-300: oklch(0.751 0.143 22);
+	--color-error-400: oklch(0.657 0.163 21.8);
+	--color-error-500: oklch(0.562 0.178 22.2);
+	--color-error-600: oklch(0.474 0.151 22); /* main */
+	--color-error-700: oklch(0.391 0.124 21.9);
+	--color-error-800: oklch(0.307 0.097 22.3);
+	--color-error-900: oklch(0.214 0.068 22.1);
+	--color-error-950: oklch(0.167 0.052 22.4);
+
+	--font-monotalic: 'monotalic', monospace;
+	--font-degular: 'degular', sans-serif;
+}
+
+html {
+	font-family: var(--font-degular);
+	font-weight: 600;
+	font-size: 18px;
+	color: var(--color-accent-800);
+	scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading {
+	@apply font-monotalic shrink-0 text-balance;
+}
+
+.h1 {
+	@apply text-primary-200 text-[clamp(3rem,5vw,5rem)];
+}
+
+.h2 {
+	@apply relative w-fit text-3xl;
+	@apply text-secondary-500 after:bg-primary-200 after:absolute after:right-0 after:bottom-0 after:left-0 after:-z-10 after:h-4;
+}
+
+.h3 {
+	@apply font-degular text-accent-800 text-[0.65rem] font-bold tracking-[0.25em] uppercase;
+}
+
+.h4 {
+	@apply border-accent-800 text-secondary-500 text-[0.7rem] tracking-[0.25em] uppercase;
+}
+
+.h5 {
+	@apply font-monotalic text-accent-800/90 text-xs tracking-[0.2em] uppercase;
+}
+
+.content-container {
+	@apply container mx-auto max-w-350 px-[4vw] py-[4vmax];
+}
+
+.button {
+	@apply font-monotalic flex items-center gap-3.5 px-6 py-3 text-sm tracking-widest uppercase transition-[box-shadow,transform] group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:shadow-none active:translate-x-1 active:translate-y-1 active:shadow-none;
+	@apply bg-primary-200 text-accent-800;
+	@apply outline-secondary-500 outline-offset-2 focus:outline-2 focus-visible:outline-2;
+	@apply shadow-[4px_4px_0_var(--color-accent-800)];
+}
+
+.button svg {
+	@apply size-5 shrink-0;
+}
+
+.link {
+	@apply font-degular inline-flex items-center gap-3 leading-snug;
+	@apply text-accent-800 hover:text-secondary-500 transition-colors;
+	@apply underline decoration-dotted;
+}
+
+.section-header {
+	@apply flex flex-col gap-2;
+}

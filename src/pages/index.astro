@@ -1,11 +1,28 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import About from '@/components/about.astro';
+import Contact from '@/components/contact.astro';
+import Hero from '@/components/hero.astro';
 import Layout from '../layouts/Layout.astro';
+import Speakers from '@/components/speakers.astro';
+import Faqs from '@/components/faqs.astro';
+import Vendors from '@/components/vendors.astro';
+import Workshops from '@/components/workshops.astro';
+import { actions } from 'astro:actions';
+import { randomUUID } from 'crypto';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const result = Astro.getActionResult(actions.submitContactForm);
+
+if (result && !result.error) {
+	return Astro.redirect('/contact/success');
+}
 ---
 
 <Layout>
-	<Welcome />
+	<Hero />
+	<About />
+	<!-- <Speakers /> -->
+	<!-- <Workshops /> -->
+	<Vendors />
+	<!-- <Faqs /> -->
+	<Contact />
 </Layout>

@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import TZFRisoDrumCharacter from '@/assets/tzf_riso_drum_character.png';
+import Layout from '@/layouts/Layout.astro';
+import Heading from '@/components/ui/heading.astro';
+import Link from '@/components/ui/link.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<Layout>
+	<div class="content-container">
+		<section aria-labelledby="success-heading" class="flex flex-col items-center gap-12 py-8 text-center">
+			<div class="flex flex-col items-center gap-6">
+				<Image
+					src={TZFRisoDrumCharacter}
+					alt="Illustration of a Risograph drum character."
+					class="w-52 md:w-64"
+				/>
+			</div>
+
+			<div class="flex flex-col items-center gap-4">
+				<div class="section-header items-center">
+					<Heading tag="h3">Message Received</Heading>
+					<Heading id="success-heading">Thanks for reaching out!</Heading>
+				</div>
+				<p class="max-w-prose text-base leading-relaxed">
+					We got your message and will get back to you as soon as we can. In the meantime, don't forget to save the date!
+				</p>
+			</div>
+
+			<div class="flex flex-col items-center gap-4">
+				<span class="group inline-block">
+					<Link href="/tzf_2026.ics" download asButton>
+						<Icon name="calendar-heart-fill" />
+						Save the Date
+					</Link>
+				</span>
+				<span class="group inline-block">
+					<Link href="/">
+						Back to Home
+					</Link>
+				</span>
+			</div>
+		</section>
+	</div>
+</Layout>

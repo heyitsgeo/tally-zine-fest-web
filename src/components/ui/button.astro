@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/**
+ * Button Component
+ */
+
+type Props = {} & HTMLAttributes<'button'>;
+
+const { class: className, type = 'button', ...rest } = Astro.props;
+---
+
+<button type={type} class:list={['button', className]} {...rest}>
+	<slot />
+</button>

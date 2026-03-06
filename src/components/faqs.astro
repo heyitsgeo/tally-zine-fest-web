@@ -1,0 +1,66 @@
+---
+const faqs = [
+	{
+		question: 'Is Tally Zine Fest free to attend?',
+		answer: 'Yes! Admission is always free. Come browse, trade, and connect with the community at no cost.',
+	},
+	{
+		question: 'Where is the event held?',
+		answer:
+			'Tally Zine Fest takes place at the Tallahassee Challenger Learning Center, 200 S Duval St, Tallahassee, FL 32301.',
+	},
+	{
+		question: 'How do I apply for a vendor table?',
+		answer:
+			'Table applications open a few months before the event. Keep an eye on our Instagram and Facebook for announcements, or reach out to us at tallzinefest@gmail.com.',
+	},
+	{
+		question: 'What kinds of work can vendors sell?',
+		answer:
+			'We welcome zines, comics, art prints, handmade goods, stickers, patches, cassettes, small press books, and other independently produced work. If you made it yourself, it probably belongs here.',
+	},
+	{
+		question: "Can I bring work to trade even if I'm not a vendor?",
+		answer:
+			'Absolutely. Zine trading is a big part of the culture at TZF. Bring copies of your work and swap with other attendees throughout the day.',
+	},
+	{
+		question: 'Is the venue accessible?',
+		answer:
+			"Yes. The Challenger Learning Center is ADA accessible. If you have specific accessibility questions, please contact us at tallzinefest@gmail.com and we'll do our best to help.",
+	},
+];
+---
+
+<section aria-labelledby="faqs-heading">
+	<div class="content-container">
+		<div class="flex flex-col gap-10">
+			<div class="flex flex-col gap-2">
+				<span class="font-monotalic text-accent-800 text-[0.65rem] tracking-[0.25em] uppercase">Got Questions?</span>
+				<h2
+					id="faqs-heading"
+					class="font-monotalic text-secondary-500 after:bg-primary-200 relative w-fit text-3xl after:absolute after:right-0 after:bottom-0 after:left-0 after:-z-10 after:h-4"
+				>FAQs</h2>
+			</div>
+
+			<dl class="divide-accent-800/15 flex flex-col gap-0 divide-y">
+				{
+					faqs.map((faq) => (
+						<details class="group py-5 first:pt-0 last:pb-0">
+							<summary class="flex cursor-pointer list-none items-start justify-between gap-6">
+								<dt class="font-monotalic text-accent-800 text-base">{faq.question}</dt>
+								<span
+									class="font-monotalic text-primary-200 mt-0.5 shrink-0 text-lg leading-none transition-transform duration-200 group-open:rotate-45"
+									aria-hidden="true"
+								>
+									+
+								</span>
+							</summary>
+							<dd class="text-accent-800/70 mt-4 text-sm leading-relaxed font-normal">{faq.answer}</dd>
+						</details>
+					))
+				}
+			</dl>
+		</div>
+	</div>
+</section>

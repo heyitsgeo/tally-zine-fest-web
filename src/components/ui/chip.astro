@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/**
+ * Chip Component
+ *
+ * @description Chips help provide information with a list of items.
+ */
+
+type Props = {
+	variant?: 'outline' | 'filled';
+} & HTMLAttributes<'span'>;
+
+const { class: className, variant = 'outline' } = Astro.props;
+---
+
+<span
+	class:list={[
+		'font-monotalic text-accent-800 border-2 px-3 py-2 text-[0.65rem] tracking-widest uppercase',
+		{ 'border-accent-800': variant === 'outline' },
+		{ 'border-primary-200 bg-primary-200': variant === 'filled' },
+		className,
+	]}
+>
+	<slot />
+</span>

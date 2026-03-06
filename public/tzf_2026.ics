@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Tally Zine Fest//Save the Date//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+
+BEGIN:VEVENT
+UID: tally-zine-fest-2026-save-the-date@tallyzinefest.com
+DTSTAMP: 2026-02-27T20:58:26Z
+DTSTART;TZID=America/New_York:20260328T110000
+DTEND;TZID=America/New_York:20260328T170000
+SUMMARY:Tally Zine Fest 2026
+DESCRIPTION:Save the date for Tally Zine Fest 2026!\nJoin us for a day of zines\, art\, and community.
+LOCATION:The Challenger Learning Center\, 200 S Duval St\, Tallahassee\, FL 32301
+URL: https://tallyzinefest.com
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+SEQUENCE: 0
+END:VEVENT
+
+END:VCALENDAR

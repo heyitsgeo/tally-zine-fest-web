@@ -1,0 +1,27 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/**
+ * Textarea Component
+ *
+ * @description Textarea input field
+ */
+
+type Props = {
+	invalid?: boolean;
+} & Omit<HTMLAttributes<'textarea'>, 'aria-invalid'>;
+
+const { class: className, invalid = false, ...rest } = Astro.props;
+---
+
+<textarea
+	aria-invalid={invalid}
+	class:list={[
+		{ 'border-error-500': invalid },
+		{ 'border-accent-800': !invalid },
+		'text-accent-800 placeholder:text-accent-800/30 focus:border-secondary-500 bg-transparent',
+		'font-degular placeholder:font-degular text-base font-medium outline-none placeholder:font-normal',
+		'w-full resize-y border-2 px-3 py-2',
+		className,
+	]}
+	{...rest}></textarea>

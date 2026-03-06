@@ -1,0 +1,258 @@
+---
+import { Image } from 'astro:assets';
+import TZFRisoDrumCharacter from '@/assets/tzf_riso_drum_character.png';
+import Button from '@/components/ui/button.astro';
+import HoneypotInput from '@/components/ui/form/honeypot-input.astro';
+import ErrorMessage from '@/components/ui/form/error-message.astro';
+import Field from '@/components/ui/form/field.astro';
+import Input from '@/components/ui/form/input.astro';
+import Label from '@/components/ui/form/label.astro';
+import Textarea from '@/components/ui/form/textarea.astro';
+import Heading from '@/components/ui/heading.astro';
+import Link from '@/components/ui/link.astro';
+import Reveal from '@/components/ui/reveal.astro';
+import { Icon } from 'astro-icon/components';
+import { actions, isInputError } from 'astro:actions';
+
+import { v4 as uuidv4 } from 'uuid';
+const idempotencyKey = uuidv4();
+
+const result = Astro.getActionResult(actions.submitContactForm);
+
+const inputErrors = isInputError(result?.error) ? result.error.fields : {};
+---
+
+<section aria-labelledby="contact">
+	<div class="content-container">
+		<Reveal class="section-header">
+			<Heading tag="h3">Get in Touch</Heading>
+			<Heading id="contact"> Contact Us </Heading>
+			<p class="text-accent-800/90 text-sm font-normal">
+				Have questions or curious about how to help make Tally Zine Fest great?
+			</p>
+		</Reveal>
+
+		<Reveal to={{ opacity: 1, duration: 1, ease: 'power3.out' }} from={{ opacity: 0 }}>
+			<div
+				class="border-accent-800 mt-8 grid grid-cols-1 gap-10 border-2 p-8 shadow-[8px_8px_0_var(--color-accent-800)] lg:grid-cols-[13rem_1fr] lg:gap-14 lg:p-10"
+			>
+				<!-- Social Aside -->
+				<Reveal as="aside" class="flex flex-col gap-5">
+					<Heading tag="h4" class="border-accent-800 m-0 border-b-2 pb-3">Find Us</Heading>
+
+					<div class="flex flex-col gap-1.5">
+						<Heading tag="h5">Venue</Heading>
+						<Link isExternal href="https://maps.google.com/?q=Tallahassee+Challenger+Learning+Center" class="text-xs">
+							Tallahassee Challenger Learning Center
+						</Link>
+						<span class="font-degular text-accent-800/80 text-xs leading-snug font-normal">
+							200 S Duval St<br />Tallahassee, FL 32301
+						</span>
+					</div>
+
+					<hr class="border-accent-800/20" />
+
+					<Link isExternal href="https://instagram.com/tallyzinefest" size="small">
+						<Icon name="instagram" />
+						Instagram
+					</Link>
+
+					<Link href="https://facebook.com/tallyzinefest" isExternal size="small">
+						<Icon name="facebook" />
+						Facebook
+					</Link>
+				</Reveal>
+
+				<!-- Contact Form -->
+				<div data-contact-form-wrapper>
+					<Reveal
+						as="form"
+						class="flex flex-col gap-7"
+						method="POST"
+						novalidate
+						action={actions.submitContactForm}
+						data-contact-form
+					>
+						<input type="hidden" name="idempotencyKey" value={idempotencyKey} />
+						<HoneypotInput name="company" label="Company" />
+						<div class="grid grid-cols-1 gap-7 md:grid-cols-2">
+							<Field>
+								<Label for="name">Name</Label>
+								<Input
+									id="name"
+									name="name"
+									type="text"
+									required
+									autocomplete="name"
+									placeholder="Your name"
+									invalid={inputErrors.name && inputErrors.name.length > 0}
+								/>
+								<ErrorMessage>{inputErrors.name?.join(', ')}</ErrorMessage>
+							</Field>
+							<Field>
+								<Label for="email">Email</Label>
+								<Input
+									id="email"
+									name="email"
+									type="email"
+									required
+									autocomplete="email"
+									placeholder="your@email.com"
+									invalid={inputErrors.email && inputErrors.email?.length > 0}
+								/>
+								<ErrorMessage>{inputErrors.email?.join(', ')}</ErrorMessage>
+							</Field>
+						</div>
+
+						<Field>
+							<Label for="subject">Subject</Label>
+							<Input
+								id="subject"
+								name="subject"
+								type="text"
+								required
+								placeholder="What's on your mind?"
+								invalid={inputErrors.subject && inputErrors.subject?.length > 0}
+							/>
+							<ErrorMessage>{inputErrors.subject?.join(', ')}</ErrorMessage>
+						</Field>
+
+						<HoneypotInput name="phone" label="Phone" />
+						<Field>
+							<Label for="message">Message</Label>
+							<Textarea
+								id="contact-message"
+								name="message"
+								required
+								rows="5"
+								placeholder="Tell us everything..."
+								invalid={inputErrors.message && inputErrors.message?.length > 0}
+							/>
+							<ErrorMessage>{inputErrors.message?.join(', ')}</ErrorMessage>
+						</Field>
+
+						<div class="pt-1">
+							<span class="group inline-block">
+								<Button type="submit"> Send It </Button>
+							</span>
+						</div>
+					</Reveal>
+				</div>
+
+				<!-- Success State -->
+				<div
+					hidden
+					data-contact-success
+					role="status"
+					class="flex flex-col items-center justify-center gap-6 py-4 text-center"
+				>
+					<Image src={TZFRisoDrumCharacter} alt="Illustration of an anthropomorphic Risograph printer." class="w-36" />
+					<div class="section-header items-center">
+						<Heading tag="h3">Message received</Heading>
+						<Heading tag="h2" level="h4">We'll be in touch!</Heading>
+					</div>
+					<p class="text-accent-800/70 max-w-xs text-sm leading-relaxed">
+						Thanks for reaching out. We'll get back to you as soon as we can.
+					</p>
+				</div>
+			</div>
+		</Reveal>
+	</div>
+</section>
+
+<script>
+	import { actions, isInputError } from 'astro:actions';
+	import { contactFormSchema, type ContactFormFields } from '@/lib/contact-schema';
+
+	const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+	if (form) {
+		function setFieldError(input: HTMLElement, message: string) {
+			input.setAttribute('aria-invalid', 'true');
+			input.classList.replace('border-accent-800', 'border-error-500');
+			const error = input.parentElement?.querySelector('p');
+			if (error) error.textContent = message;
+		}
+
+		function clearFieldError(input: HTMLElement) {
+			input.setAttribute('aria-invalid', 'false');
+			input.classList.replace('border-error-500', 'border-accent-800');
+			const error = input.parentElement?.querySelector('p');
+			if (error) error.textContent = '';
+		}
+
+		function validateField(name: ContactFormFields, value: string): string | null {
+			const result = contactFormSchema.shape[name].safeParse(value);
+			return result.success ? null : (result.error.issues[0]?.message ?? 'Invalid');
+		}
+
+		function getTrackedInputs() {
+			return Array.from(
+				form!.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+					'input:not([type="hidden"]):not([name="company"]):not([name="phone"]), textarea',
+				),
+			);
+		}
+
+		// Validate on blur, clear on input if already invalid
+		getTrackedInputs().forEach((input) => {
+			const name = input.name as ContactFormFields;
+			if (!(name in contactFormSchema.shape)) return;
+
+			input.addEventListener('blur', () => {
+				const message = validateField(name, input.value);
+				if (message) setFieldError(input, message);
+			});
+
+			input.addEventListener('input', () => {
+				if (input.getAttribute('aria-invalid') !== 'true') return;
+				const message = validateField(name, input.value);
+				if (!message) clearFieldError(input);
+			});
+		});
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			// Client-side validate all fields before sending
+			let hasErrors = false;
+			getTrackedInputs().forEach((input) => {
+				const name = input.name as ContactFormFields;
+				if (!(name in contactFormSchema.shape)) return;
+				const message = validateField(name, input.value);
+				if (message) {
+					setFieldError(input, message);
+					hasErrors = true;
+				} else {
+					clearFieldError(input);
+				}
+			});
+			if (hasErrors) return;
+
+			const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
+			if (submit) submit.disabled = true;
+
+			const { error } = await actions.submitContactForm(new FormData(form));
+
+			if (submit) submit.disabled = false;
+
+			if (error) {
+				if (isInputError(error)) {
+					for (const [name, messages] of Object.entries(error.fields)) {
+						const input = form.querySelector<HTMLElement>(`[name="${name}"]`);
+						if (input) setFieldError(input, messages?.join(', ') ?? '');
+					}
+				}
+				return;
+			}
+
+			const wrapper = document.querySelector('[data-contact-form-wrapper]');
+			const success = document.querySelector('[data-contact-success]');
+			if (wrapper) wrapper.setAttribute('hidden', '');
+			if (success) {
+				success.removeAttribute('hidden');
+				success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+			}
+		});
+	}
+</script>

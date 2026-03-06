@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import TZFScissorsCharacter from '@/assets/tzf_scissors_character.png';
+import Layout from '@/layouts/Layout.astro';
+import Heading from '@/components/ui/heading.astro';
+import Link from '@/components/ui/link.astro';
+---
+
+<Layout>
+	<div class="content-container">
+		<section aria-labelledby="not-found-heading" class="flex flex-col items-center gap-12 py-8 text-center">
+			<Image
+				src={TZFScissorsCharacter}
+				alt="Illustration of a scissors character."
+				class="w-52 md:w-64"
+			/>
+
+			<div class="flex flex-col items-center gap-4">
+				<div class="section-header items-center">
+					<Heading tag="h3">Error 404</Heading>
+					<Heading id="not-found-heading">Page not found</Heading>
+				</div>
+				<p class="max-w-prose text-base leading-relaxed">
+					Looks like this page got cut. Let's get you back to something real.
+				</p>
+			</div>
+
+			<span class="group inline-block">
+				<Link href="/" asButton>
+					Back to Home
+				</Link>
+			</span>
+		</section>
+	</div>
+</Layout>

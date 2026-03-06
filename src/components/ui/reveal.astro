@@ -1,0 +1,118 @@
+---
+/**
+ * Reveal Component
+ *
+ * @description Animates children components based on users motion preferences.
+ */
+
+import type { HTMLAttributes } from 'astro/types';
+import type { gsap } from 'gsap';
+
+type Props = {
+	as?: keyof HTMLElementTagNameMap;
+	from?: gsap.TweenVars;
+	to?: gsap.TweenVars;
+	staggerTime?: number;
+} & HTMLAttributes<'div'>;
+
+const {
+	as: Tag = 'div',
+	class: className,
+	from = { opacity: 0, y: 30 },
+	to = { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+	staggerTime = 0.15,
+	...rest
+} = Astro.props;
+---
+
+<Tag
+	data-reveal
+	class:list={['reveal-container', className]}
+	data-from={JSON.stringify(from)}
+	data-to={JSON.stringify(to)}
+	data-stagger-time={staggerTime}
+	{...rest}
+>
+	<slot />
+</Tag>
+
+<style>
+	:where(.reveal-container) > * {
+		visibility: hidden;
+	}
+</style>
+
+<noscript>
+	<style>
+		:where(.reveal-container) > * {
+			visibility: visible;
+		}
+	</style>
+</noscript>
+
+<script>
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const contexts = new Map<HTMLElement, ReturnType<typeof gsap.context>>([]);
+
+	function init() {
+		document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+			const from = JSON.parse(el.dataset.from ?? '{}');
+			const to = JSON.parse(el.dataset.to ?? '{}');
+			const staggerTime = Number(el.dataset['stagger-time'] ?? 0.15);
+
+			const ctx = gsap.context(() => {
+				const items = el.children; // animate all children
+
+				const mediaMatcher = gsap.matchMedia();
+
+				mediaMatcher.add(
+					{
+						reduceMotion: '(prefers-reduced-motion: reduce)',
+						fullMotion: '(prefers-reduced-motion: no-preference)',
+					},
+					(matcherContext) => {
+						const { reduceMotion } = matcherContext.conditions ?? {};
+
+						gsap.fromTo(
+							items,
+							{ ...from, autoAlpha: 0 },
+							{
+								...to,
+								duration: reduceMotion ? 0 : to.duration,
+								y: reduceMotion ? 0 : to.y,
+								x: reduceMotion ? 0 : to.x,
+								stagger: {
+									each: reduceMotion ? 0 : staggerTime,
+								},
+								scrollTrigger: {
+									trigger: el,
+									start: 'top 95%',
+									once: true,
+								},
+								autoAlpha: 1,
+							},
+						);
+					},
+				);
+			}, el);
+
+			contexts.set(el, ctx);
+		});
+	}
+
+	document.addEventListener('astro:page-load', init);
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
+
+	document.addEventListener('astro:before-swap', () => {
+		contexts.forEach((ctx) => ctx.revert());
+	});
+</script>

@@ -1,14 +1,45 @@
 {
-  "name": "tally-zine-fest-web",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "astro": "^5.17.1"
-  }
+	"name": "tally-zine-fest-web",
+	"type": "module",
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"preinstall": "npx only-allow pnpm"
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "^12.6.12",
+		"@astrojs/node": "^9.5.4",
+		"astro": "^5.17.1",
+		"astro-icon": "^1.1.5",
+		"googleapis": "^171.4.0",
+		"gsap": "^3.14.2",
+		"luxon": "^3.7.2",
+		"resend": "^6.9.3",
+		"uuid": "^13.0.0"
+	},
+	"devDependencies": {
+		"@astrojs/ts-plugin": "^1.10.6",
+		"@eslint/js": "^10.0.1",
+		"@tailwindcss/forms": "^0.5.11",
+		"@tailwindcss/vite": "^4.2.1",
+		"@types/luxon": "^3.7.1",
+		"eslint": "^10.0.2",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-astro": "^1.6.0",
+		"eslint-plugin-jsx-a11y": "^6.10.2",
+		"eslint-plugin-prettier": "^5.5.5",
+		"globals": "^17.3.0",
+		"prettier": "^3.8.1",
+		"prettier-plugin-astro": "^0.14.1",
+		"prettier-plugin-organize-imports": "^4.3.0",
+		"prettier-plugin-tailwindcss": "^0.7.2",
+		"tailwindcss": "^4.2.1",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.56.1",
+		"vite": "^6.4.1",
+		"wrangler": "^4.71.0"
+	}
 }

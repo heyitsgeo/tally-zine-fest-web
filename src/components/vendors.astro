@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+import TZFVendorsIllustration from '@/assets/tzf_vendors_illustration.png';
+import Heading from '@/components/ui/heading.astro';
+import Reveal from '@/components/ui/reveal.astro';
+---
+
+<section aria-labelledby="vendors-heading">
+	<div class="content-container">
+		<div class="flex flex-col gap-10">
+			<Reveal class="section-header">
+				<Heading tag="h3">Meet the Makers</Heading>
+				<Heading id="vendors-heading">Vendors</Heading>
+				<p class="text-accent-800/90 text-sm font-normal">
+					40+ tables of zines, art prints, comics, and handmade goods. <span class="text-secondary-500 font-bold"
+						>Announcing Soon!</span
+					>
+				</p>
+			</Reveal>
+
+			<Reveal class="flex w-full items-center justify-center">
+				<div class="flex w-[clamp(20rem,40vw,70rem)]">
+					<Image src={TZFVendorsIllustration} alt="Illustration of vendors at Tally Zine Fest." class="w-full" />
+				</div>
+			</Reveal>
+		</div>
+	</div>
+</section>

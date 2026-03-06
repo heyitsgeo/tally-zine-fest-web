@@ -1,0 +1,29 @@
+---
+/**
+ * Heading Component
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+const headingOptions = {
+	h1: 'h1',
+	h2: 'h2',
+	h3: 'h3',
+	h4: 'h4',
+	h5: 'h5',
+	h6: 'h6',
+} as const;
+
+type Props = {
+	tag?: keyof typeof headingOptions;
+	level?: keyof typeof headingOptions;
+} & HTMLAttributes<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'>;
+
+const { tag = 'h2', level = tag, ...rest } = Astro.props;
+const Tag = headingOptions[tag];
+
+const slotContent = Astro.slots.render('default');
+---
+
+<Tag class:list={['heading', level]} {...rest}>
+	<Fragment set:html={slotContent} />
+</Tag>
