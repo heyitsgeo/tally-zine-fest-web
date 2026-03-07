@@ -2,19 +2,19 @@ import { contactFormSchema } from '@/lib/contact-schema';
 import { ENV } from '@/lib/env';
 import { z } from 'astro/zod';
 import { defineAction } from 'astro:actions';
-import { google } from 'googleapis';
+import { JWT } from 'google-auth-library';
+import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { DateTime } from 'luxon';
 import { Resend } from 'resend';
-
 const requestTokens = new Set<string>();
 
-const googleAuth = new google.auth.GoogleAuth({
-	credentials: {
-		client_email: ENV.googleServiceAccountEmail,
-		private_key: ENV.googlePrivateKey,
-	},
+const googleAuth = new JWT({
+	email: ENV.googleServiceAccountEmail,
+	key: ENV.googlePrivateKey,
 	scopes: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/gmail.send'],
 });
+
+const tallyZineFestDoc = new GoogleSpreadsheet(ENV.contactGoogleSheetId, googleAuth);
 
 const resend = new Resend(ENV.resendAPIKey);
 
@@ -27,25 +27,17 @@ const contactRequestSchema = contactFormSchema.extend({
 type ContactRequest = z.infer<typeof contactRequestSchema>;
 
 async function appendContactToSheet(input: ContactRequest & { submittedAt: DateTime; isSpam: boolean }) {
-	const sheets = google.sheets({ version: 'v4', auth: googleAuth });
+	await tallyZineFestDoc.loadInfo();
+	const sheet = tallyZineFestDoc.sheetsById[0];
 
-	await sheets.spreadsheets.values.append({
-		spreadsheetId: ENV.contactGoogleSheetId,
-		range: 'Contacts!A:D',
-		valueInputOption: 'RAW',
-		requestBody: {
-			values: [
-				[
-					input.submittedAt.setZone('America/New_York').toLocaleString(DateTime.DATETIME_SHORT),
-					input.name,
-					input.email,
-					input.subject,
-					input.message,
-					input.isSpam ? 'SPAM' : '',
-				],
-			],
-		},
-	});
+	await sheet.addRow([
+		input.submittedAt.setZone('America/New_York').toLocaleString(DateTime.DATETIME_SHORT),
+		input.name,
+		input.email,
+		input.subject,
+		input.message,
+		input.isSpam ? 'SPAM' : '',
+	]);
 }
 
 async function sendEmails(input: ContactRequest & { submittedAt: DateTime }) {
@@ -87,10 +79,13 @@ export const server = {
 					console.info('Spam submission detected, logging to sheet without emailing.');
 					await appendContactToSheet({ ...input, submittedAt, isSpam: true });
 				} else {
-					await Promise.all([
-						appendContactToSheet({ ...input, submittedAt, isSpam: false }),
-						sendEmails({ ...input, submittedAt }),
-					]);
+					const tasks: Promise<unknown>[] = [appendContactToSheet({ ...input, submittedAt, isSpam: false })];
+					if (ENV.disableMailer) {
+						console.info('Mailer disabled, skipping email send.');
+					} else {
+						tasks.push(sendEmails({ ...input, submittedAt }));
+					}
+					await Promise.all(tasks);
 				}
 			} catch (error) {
 				console.error(error);

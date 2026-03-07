@@ -8,6 +8,7 @@ interface ImportMetaEnv {
 	readonly RESEND_API_KEY: string;
 	readonly RESEND_FROM: string;
 	readonly CONTACT_EMAIL_DISTRO_LIST: string;
+	readonly DISABLE_MAILER: string;
 }
 
 interface ImportMeta {

@@ -8,4 +8,5 @@ export const ENV = {
 	resendAPIKey: import.meta.env.RESEND_API_KEY,
 	resendFrom: import.meta.env.RESEND_FROM,
 	contactEmailDistroList: import.meta.env.CONTACT_EMAIL_DISTRO_LIST,
+	disableMailer: import.meta.env.DISABLE_MAILER === 'true',
 };
