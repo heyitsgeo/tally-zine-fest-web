@@ -11,11 +11,11 @@ type Props = {
 
 const {
 	title,
-	description = 'Tally Zine Fest is a FREE annual celebration of zine makers, self-publishing, printmaking, and DIY culture. March 28, 2026 at the Challenger Learning Center in Tallahassee, FL.',
-	image = '/og-image.jpg',
+	description = 'Tally Zine Fest is an annual celebration of local zine makers, self-publishing, printmaking and DIY culture.',
+	image = '/og_image.jpg',
 } = Astro.props;
 
-const siteTitle = 'Tally Zine Fest';
+const siteTitle = 'Tally Zine Fest 2026';
 const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 const canonicalURL = new URL(Astro.url.pathname, Astro.url);
 const ogImage = new URL(image, Astro.url);
