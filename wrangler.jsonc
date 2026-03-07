@@ -1,16 +1,32 @@
 {
 	"main": "dist/_worker.js/index.js",
 	"name": "tally-zine-fest-web",
-  "compatibility_date": "2026-03-06",
-  "compatibility_flags": [
-    "nodejs_compat",
-    "global_fetch_strictly_public"
-  ],
+	"compatibility_date": "2026-03-06",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./dist"
 	},
 	"observability": {
-    "enabled": true
-  }
+		"enabled": true
+	},
+	"routes": [
+		{
+			"pattern": "tallyzinefest.com",
+			"zone_name": "tallyzinefest.com",
+			"custom_domain": true
+		}
+	],
+	"vars": {
+		"CONTACT_EMAIL_DISTRO_LIST": "tallyzinefest@gmail.com",
+		"GOOGLE_SERVICE_ACCOUNT_EMAIL": "tally-zine-fest-web@tally-zine-fest.iam.gserviceaccount.com",
+		"PUBLIC_FACEBOOK_URL": "https://www.facebook.com/tallyzinefestival",
+		"PUBLIC_INSTAGRAM_URL": "https://www.instagram.com/tallyzinefest",
+		"RESEND_FROM": "hello@updates.tallyzinefest.com"
+	},
+	"workers_dev": true,
+	"preview_urls": true
 }
