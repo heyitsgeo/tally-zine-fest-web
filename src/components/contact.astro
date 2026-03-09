@@ -15,6 +15,7 @@ import { Icon } from 'astro-icon/components';
 import { actions, isInputError } from 'astro:actions';
 
 import { v4 as uuidv4 } from 'uuid';
+import { ENV } from '@/lib/env';
 const idempotencyKey = uuidv4();
 
 const result = Astro.getActionResult(actions.submitContactForm);
@@ -52,12 +53,12 @@ const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 
 					<hr class="border-accent-800/20" />
 
-					<Link isExternal href="https://instagram.com/tallyzinefest" size="small">
+					<Link isExternal href={ENV.instagramUrl} size="small">
 						<Icon name="instagram" />
 						Instagram
 					</Link>
 
-					<Link href="https://facebook.com/tallyzinefest" isExternal size="small">
+					<Link href={ENV.facebookUrl} isExternal size="small">
 						<Icon name="facebook" />
 						Facebook
 					</Link>
