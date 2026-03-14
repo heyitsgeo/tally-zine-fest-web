@@ -1,12 +1,20 @@
-export const ENV = {
-	instagramUrl: import.meta.env.PUBLIC_INSTAGRAM_URL ?? process.env.PUBLIC_INSTAGRAM_URL,
-	facebookUrl: import.meta.env.PUBLIC_FACEBOOK_URL ?? process.env.PUBLIC_FACEBOOK_URL,
-	contactEmail: import.meta.env.PUBLIC_CONTACT_EMAIL ?? process.env.PUBLIC_CONTACT_EMAIL,
-	googleServiceAccountEmail: import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ?? process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-	googlePrivateKey: import.meta.env.GOOGLE_PRIVATE_KEY ?? process.env.GOOGLE_PRIVATE_KEY,
-	contactGoogleSheetId: import.meta.env.CONTACT_GOOGLE_SHEET_ID ?? process.env.CONTACT_GOOGLE_SHEET_ID,
-	resendAPIKey: import.meta.env.RESEND_API_KEY ?? process.env.RESEND_API_KEY,
-	resendFrom: import.meta.env.RESEND_API_KEY ?? process.env.RESEND_API_KEY,
-	contactEmailDistroList: import.meta.env.CONTACT_EMAIL_DISTRO_LIST ?? process.env.CONTACT_EMAIL_DISTRO_LIST,
-	disableMailer: (import.meta.env.DISABLE_MAILER ?? process.env.DISABLE_MAILER) === 'true',
-};
+type RuntimeEnv = Record<string, string | undefined>;
+
+function get(key: string, runtimeEnv?: RuntimeEnv): string | undefined {
+	return runtimeEnv?.[key] ?? import.meta.env[key];
+}
+
+export function getEnv(runtimeEnv?: RuntimeEnv) {
+	return {
+		instagramUrl: get('PUBLIC_INSTAGRAM_URL', runtimeEnv),
+		facebookUrl: get('PUBLIC_FACEBOOK_URL', runtimeEnv),
+		contactEmail: get('PUBLIC_CONTACT_EMAIL', runtimeEnv),
+		googleServiceAccountEmail: get('GOOGLE_SERVICE_ACCOUNT_EMAIL', runtimeEnv),
+		googlePrivateKey: get('GOOGLE_PRIVATE_KEY', runtimeEnv),
+		contactGoogleSheetId: get('CONTACT_GOOGLE_SHEET_ID', runtimeEnv),
+		resendAPIKey: get('RESEND_API_KEY', runtimeEnv),
+		resendFrom: get('RESEND_FROM', runtimeEnv),
+		contactEmailDistroList: get('CONTACT_EMAIL_DISTRO_LIST', runtimeEnv),
+		disableMailer: get('DISABLE_MAILER', runtimeEnv) === 'true',
+	};
+}

@@ -1,5 +1,5 @@
 import { contactFormSchema } from '@/lib/contact-schema';
-import { ENV } from '@/lib/env';
+import { getEnv } from '@/lib/env';
 import { z } from 'astro/zod';
 import { defineAction } from 'astro:actions';
 import { JWT } from 'google-auth-library';
@@ -7,16 +7,6 @@ import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { DateTime } from 'luxon';
 import { Resend } from 'resend';
 const requestTokens = new Set<string>();
-
-const googleAuth = new JWT({
-	email: ENV.googleServiceAccountEmail,
-	key: ENV.googlePrivateKey,
-	scopes: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/gmail.send'],
-});
-
-const tallyZineFestDoc = new GoogleSpreadsheet(ENV.contactGoogleSheetId, googleAuth);
-
-const resend = new Resend(ENV.resendAPIKey);
 
 const contactRequestSchema = contactFormSchema.extend({
 	idempotencyKey: z.string().min(1),
@@ -26,42 +16,22 @@ const contactRequestSchema = contactFormSchema.extend({
 
 type ContactRequest = z.infer<typeof contactRequestSchema>;
 
-async function appendContactToSheet(input: ContactRequest & { submittedAt: DateTime; isSpam: boolean }) {
-	await tallyZineFestDoc.loadInfo();
-	const sheet = tallyZineFestDoc.sheetsById[0];
-
-	await sheet.addRow([
-		input.submittedAt.setZone('America/New_York').toLocaleString(DateTime.DATETIME_SHORT),
-		input.name,
-		input.email,
-		input.subject,
-		input.message,
-		input.isSpam ? 'SPAM' : '',
-	]);
-}
-
-async function sendEmails(input: ContactRequest & { submittedAt: DateTime }) {
-	await Promise.all([
-		resend.emails.send({
-			from: `Tally Zine Fest <${ENV.resendFrom}>`,
-			to: import.meta.env.DEV ? 'delivered@resend.dev' : input.email,
-			subject: `We received your message, ${input.name}`,
-			text: `Hi ${input.name},\n\nThanks for reaching out. We've received your message and will be in touch soon.\n\n- Tally Zine Fest Crew`,
-		}),
-		resend.emails.send({
-			from: `Tally Zine Fest Site <${ENV.resendFrom}>`,
-			to: import.meta.env.DEV ? 'delivered@resend.dev' : ENV.contactEmailDistroList.split(','),
-			subject: `New contact request from ${input.name}`,
-			text: `Name: ${input.name}\nEmail: ${input.email}\nSubject: ${input.subject}Date: ${input.submittedAt.setZone('America/New_York').toLocaleString(DateTime.DATETIME_SHORT)}\nMessage: ${input.message}`,
-		}),
-	]);
-}
-
 export const server = {
 	submitContactForm: defineAction({
 		accept: 'form',
 		input: contactRequestSchema,
 		handler: async (input, context) => {
+			const ENV = getEnv(context.locals.runtime.env);
+
+			const googleAuth = new JWT({
+				email: ENV.googleServiceAccountEmail,
+				key: ENV.googlePrivateKey,
+				scopes: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/gmail.send'],
+			});
+
+			const tallyZineFestDoc = new GoogleSpreadsheet(ENV.contactGoogleSheetId, googleAuth);
+			const resend = new Resend(ENV.resendAPIKey);
+
 			const matchingRequestToken = requestTokens.has(input.idempotencyKey);
 
 			if (matchingRequestToken) {
@@ -73,6 +43,37 @@ export const server = {
 
 			const submittedAt = DateTime.now();
 			const isSpam = !!(input.company || input.phone);
+
+			async function appendContactToSheet(input: ContactRequest & { submittedAt: DateTime; isSpam: boolean }) {
+				await tallyZineFestDoc.loadInfo();
+				const sheet = tallyZineFestDoc.sheetsById[0];
+
+				await sheet.addRow([
+					input.submittedAt.setZone('America/New_York').toLocaleString(DateTime.DATETIME_SHORT),
+					input.name,
+					input.email,
+					input.subject,
+					input.message,
+					input.isSpam ? 'SPAM' : '',
+				]);
+			}
+
+			async function sendEmails(input: ContactRequest & { submittedAt: DateTime }) {
+				await Promise.all([
+					resend.emails.send({
+						from: `Tally Zine Fest <${ENV.resendFrom}>`,
+						to: import.meta.env.DEV ? 'delivered@resend.dev' : input.email,
+						subject: `We received your message, ${input.name}`,
+						text: `Hi ${input.name},\n\nThanks for reaching out. We've received your message and will be in touch soon.\n\n- Tally Zine Fest Crew`,
+					}),
+					resend.emails.send({
+						from: `Tally Zine Fest Site <${ENV.resendFrom}>`,
+						to: import.meta.env.DEV ? 'delivered@resend.dev' : ENV.contactEmailDistroList.split(','),
+						subject: `New contact request from ${input.name}`,
+						text: `Name: ${input.name}\nEmail: ${input.email}\nSubject: ${input.subject}Date: ${input.submittedAt.setZone('America/New_York').toLocaleString(DateTime.DATETIME_SHORT)}\nMessage: ${input.message}`,
+					}),
+				]);
+			}
 
 			try {
 				if (isSpam) {
