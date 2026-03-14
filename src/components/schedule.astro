@@ -1,0 +1,31 @@
+---
+import Heading from '@/components/ui/heading.astro';
+import Reveal from '@/components/ui/reveal.astro';
+import { schedule } from '../config/schedule';
+---
+
+<section aria-labelledby="schedule">
+	<div class="content-container">
+		<div class="flex flex-col gap-10">
+			<Reveal class="section-header">
+				<Heading tag="h3">What&apos;s Happening</Heading>
+				<Heading id="schedule">Schedule</Heading>
+			</Reveal>
+
+			<Reveal as="ul" class="divide-accent-800/15 m-0 list-none divide-y-2 p-0">
+				{
+					schedule.map((agendaItem) => (
+						<li class="grid gap-4 py-7 first:pt-0 last:pb-0 sm:grid-cols-[6rem_1fr_auto] sm:gap-8">
+							<div class="font-monotalic text-secondary-500 text-sm">{agendaItem.startsAt}</div>
+							<div class="flex flex-col gap-1.5">
+								<Heading tag="h3" level="h4">
+									<span class="text-accent-900">{agendaItem.title}</span>
+								</Heading>
+							</div>
+						</li>
+					))
+				}
+			</Reveal>
+		</div>
+	</div>
+</section>

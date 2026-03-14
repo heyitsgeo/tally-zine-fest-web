@@ -15,7 +15,8 @@ import { Icon } from 'astro-icon/components';
 import { actions, isInputError } from 'astro:actions';
 
 import { v4 as uuidv4 } from 'uuid';
-import { ENV } from '@/lib/env';
+import { getEnv } from '@/lib/env';
+const ENV = getEnv(Astro.locals.runtime.env);
 const idempotencyKey = uuidv4();
 
 const result = Astro.getActionResult(actions.submitContactForm);
